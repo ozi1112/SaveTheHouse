@@ -36,7 +36,7 @@ public class GUIProxy : MBSingleton<GUIProxy> {
 	public void MoneyChange(int current)
 	{ }
 
-	public void UpdateWeaponState(WeaponManager.Weapons weapon ) //change weapon
+	public void UpdateWeaponState(WeaponManager.WeaponType weapon ) //change weapon
 	{ }
 
 
@@ -51,12 +51,12 @@ public class GUIProxy : MBSingleton<GUIProxy> {
 		PlayerController.instance.Reload();
 	}
 
-	public void ActivateWeapon(WeaponManager.Weapons weapon)
+	public void ActivateWeapon(WeaponManager.WeaponType weapon)
 	{
 		WeaponManager.instance.AtivateWeapon (weapon);
 	}
 
-	public void SwitchWeapon(WeaponManager.Weapons weapon)
+	public void SwitchWeapon(WeaponManager.WeaponType weapon)
 	{
 		WeaponManager.instance.SwitchWeapon (weapon);
 	}

@@ -23,21 +23,20 @@ public class WeaponController : MBSingleton<WeaponController>
 		}
 		set{
 			_weaponState = value;
-			GUIWeapon.instance.UpdateWeaponState ();
+			GUIWeapon.instance.UpdateWeaponState (_weaponState);
 		}
 	}
 
-
 	WeaponState _weaponState = WeaponState.Idle;
 
-
-
-
 	bool stopShootingRequest = false;
-	bool reloadRequest = false;
 
 	int currentAmmo = 100;
 	int maxAmmo = 100;
+
+
+
+
 	float reloadTime = 1;
 	/// <summary>
 	/// Weapon power - can't be 0.
@@ -51,7 +50,7 @@ public class WeaponController : MBSingleton<WeaponController>
 	public void StartShooting()
 	{
 		stopShootingRequest = false;
-		if(_weaponState == WeaponState.Idle)
+		if(weaponState == WeaponState.Idle)
 		{
 			if (continousFire) {
 				StartCoroutine (CoContinousFire());
@@ -82,13 +81,16 @@ public class WeaponController : MBSingleton<WeaponController>
 
 	public void Reload()
 	{
-		StopAllCoroutines ();
-		StartCoroutine (CoReload());
+		if(!IsFullAmmo())
+		{
+			StopAllCoroutines ();
+			StartCoroutine (CoReload());
+		}
 	}
 
 	IEnumerator CoShoot()
 	{
-		_weaponState = WeaponState.Shooting;
+		weaponState = WeaponState.Shooting;
 		if (currentAmmo > 0) 
 		{
 			Debug.Log (string.Format("Shoot {0} / {1}", currentAmmo, maxAmmo));
@@ -116,14 +118,14 @@ public class WeaponController : MBSingleton<WeaponController>
 		if (continousFire) {
 			yield return new WaitForSeconds (1/shootPerSecond);
 		} else {
-			_weaponState = WeaponState.Idle;
+			weaponState = WeaponState.Idle;
 		}
 	}
 
 	IEnumerator CoContinousFire()
 	{
 		Debug.Log ("ContinousFire");
-		_weaponState = WeaponState.Shooting;
+		weaponState = WeaponState.Shooting;
 		while (!stopShootingRequest) {
 			yield return CoShoot ();
 		}
@@ -138,9 +140,14 @@ public class WeaponController : MBSingleton<WeaponController>
 	IEnumerator CoReload()
 	{
 		Debug.Log (string.Format( "Reload {0} / {1}", currentAmmo, maxAmmo ));
-		_weaponState = WeaponState.Reloading;
+		weaponState = WeaponState.Reloading;
 		yield return new WaitForSeconds (reloadTime);
 		currentAmmo = maxAmmo;
+	}
+
+	bool IsFullAmmo()
+	{
+		return currentAmmo == maxAmmo;
 	}
 
 

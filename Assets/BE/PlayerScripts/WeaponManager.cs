@@ -19,13 +19,13 @@ public class Weapon
 	/// </summary>
 	public bool available;
 
-	//TODO sound
-	//TODO image
+	string clipName;
+	string imageName;
 }
 
 public class WeaponManager : MBSingleton<WeaponManager> {
 
-	public enum Weapons
+	public enum WeaponType
 	{
 		Pistol,
 		Uzi,
@@ -33,22 +33,38 @@ public class WeaponManager : MBSingleton<WeaponManager> {
 	}
 
 	Weapon[] weaponTable;
+	WeaponType _activeWeapon;
 
-	public void SwitchWeapon(Weapons weaponType)
+	WeaponType activeWeapon
+	{
+		get{
+			return _activeWeapon;
+		}
+		set{
+			_activeWeapon = value;
+			//update GUI
+			GUIWeapon.instance.WeaponChange (_activeWeapon);
+		}
+	}
+
+
+	public void SwitchWeapon(WeaponType weaponType)
 	{
 		Weapon weapon = weaponTable [(int)weaponType];
 		if (weapon.available) {
+			activeWeapon = weaponType;
 			GetComponent<WeaponController> ().SetWeaponParams (weapon.maxAmmo, 
 				weapon.reloadTime, 
 				weapon.power,
 				weapon.continousFire,
-				weapon.shootPerSecond);
-			//TODO GUI weapon change & display graphic
+				weapon.shootPerSecond
+			);
 		}
 	}
 
-	public void AtivateWeapon(Weapons weaponType)
+	public void AtivateWeapon(WeaponType weaponType)
 	{
+		activeWeapon = weaponType;
 		Weapon weapon = weaponTable [(int)weaponType];
 		weapon.available = true;
 	}
@@ -56,9 +72,9 @@ public class WeaponManager : MBSingleton<WeaponManager> {
 	// Use this for initialization
 	void Start ()
 	{
-		weaponTable = new Weapon[(int)Weapons.Last];
+		weaponTable = new Weapon[(int)WeaponType.Last];
 
-		weaponTable[(int)Weapons.Pistol] = 
+		weaponTable[(int)WeaponType.Pistol] = 
 			new Weapon{ 
 			name = "Pistol",
 			maxAmmo=100, 
@@ -69,7 +85,7 @@ public class WeaponManager : MBSingleton<WeaponManager> {
 			available=true
 			};
 
-		weaponTable[(int)Weapons.Uzi] = 
+		weaponTable[(int)WeaponType.Uzi] = 
 			new Weapon{ 
 			name = "Uzi",
 			maxAmmo = 100, 

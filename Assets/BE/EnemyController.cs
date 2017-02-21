@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour, IHealth
 	public float attackPower = 1;
 	public float attackSpeed = 1;
 
-	Rigidbody rigidbody;
+	new Rigidbody rigidbody;
 
 	// Use this for initialization
 	void Start ()

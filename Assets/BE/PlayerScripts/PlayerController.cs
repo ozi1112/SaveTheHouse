@@ -27,9 +27,15 @@ public class PlayerController : MBSingleton<PlayerController>, IHealth
 		{
 			StartShooting ();
 		}
+
 		else if(Input.GetMouseButtonUp (0))
 		{
 			StopShooting ();
+		}
+
+		else if(Input.GetKeyDown(KeyCode.R))
+		{
+			Reload ();
 		}
 	}
 
@@ -48,7 +54,7 @@ public class PlayerController : MBSingleton<PlayerController>, IHealth
 	}
 		
 
-	public void SetActiveWeapon(WeaponManager.Weapons weapon)
+	public void SetActiveWeapon(WeaponManager.WeaponType weapon)
 	{
 		WeaponManager.instance.SwitchWeapon (weapon);
 	}
