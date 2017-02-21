@@ -4,6 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 
+
+
 public class WeaponController : MBSingleton<WeaponController> 
 {
 
@@ -16,28 +18,74 @@ public class WeaponController : MBSingleton<WeaponController>
 		Reloading
 	}
 
-	public WeaponState weaponState
+    WeaponState _weaponState = WeaponState.Idle;
+    public WeaponState weaponState
 	{
 		get {
 			return _weaponState;
 		}
 		set{
 			_weaponState = value;
-			GUIWeapon.instance.UpdateWeaponState (_weaponState);
+
+            if (GUIWeapon.instance != null)
+            {
+                GUIWeapon.instance.UpdateWeaponState(_weaponState);
+            }
+            else
+            {
+                Debug.Log("Null GUIWeapon");
+            }
 		}
 	}
+    
+    int _currentAmmo = 100;
+    public int currentAmmo
+    {
+        get
+        {
+            return _currentAmmo;
+        }
+        set
+        {
+            _currentAmmo = value;
 
-	WeaponState _weaponState = WeaponState.Idle;
+            if (GUIWeapon.instance != null)
+            {
+                GUIWeapon.instance.WeaponAmmoChange(_currentAmmo, _maxAmmo);
+            }
+            else
+            {
+                Debug.Log("Null GUIWeapon");
+            }
+        }
+    }
 
-	bool stopShootingRequest = false;
+    int _maxAmmo = 100;
+    public int maxAmmo
+    {
+        get
+        {
+            return _maxAmmo;
+        }
+        set
+        {
+            _maxAmmo = value;
 
-	int currentAmmo = 100;
-	int maxAmmo = 100;
+            if (GUIWeapon.instance != null)
+            {
+                GUIWeapon.instance.WeaponAmmoChange(_currentAmmo, _maxAmmo);
+            }
+            else
+            {
+                Debug.Log("Null GUIWeapon");
+            }
+        }
+    }
+
+    bool stopShootingRequest = false;
 
 
-
-
-	float reloadTime = 1;
+    float reloadTime = 1;
 	/// <summary>
 	/// Weapon power - can't be 0.
 	/// </summary>

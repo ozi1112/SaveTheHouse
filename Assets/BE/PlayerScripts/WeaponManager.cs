@@ -18,9 +18,6 @@ public class Weapon
 	/// Bought?
 	/// </summary>
 	public bool available;
-
-	string clipName;
-	string imageName;
 }
 
 public class WeaponManager : MBSingleton<WeaponManager> {
@@ -42,8 +39,16 @@ public class WeaponManager : MBSingleton<WeaponManager> {
 		}
 		set{
 			_activeWeapon = value;
-			//update GUI
-			GUIWeapon.instance.WeaponChange (_activeWeapon);
+            //update GUI
+            if (GUIWeapon.instance != null)
+            {
+                GUIWeapon.instance.WeaponChange(_activeWeapon);
+            }
+            else
+            {
+                Debug.Log("Null GUIWeapon");
+            }
+            
 		}
 	}
 

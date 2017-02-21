@@ -1,15 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GUIPlayer : MBSingleton<GUIPlayer> {
 
+    public Text money;
 
-	//CALLBACKS
-	public void HealthChange(int current, int max)
-	{ }
+    private void Start()
+    {
+        MoneyChange(PlayerController.instance.CurrentMoney);
+    }
+
+    //CALLBACKS
+    public void HealthChange(int current, int max)
+	{
+
+    }
 	public void MoneyChange(int current)
-	{ }
+	{
+        money.text = current.ToString();
+    }
 
 	//COMMANDS
 	public bool SpendMoney(int value)

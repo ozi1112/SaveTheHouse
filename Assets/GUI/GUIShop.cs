@@ -11,7 +11,9 @@ public class GUIShop : MBSingleton<GUIShop>
 	}
 
 	void BuyItem()
-	{ }
+	{
+
+    }
 
 
 }
