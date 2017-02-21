@@ -23,17 +23,18 @@ public class Weapon
 	//TODO image
 }
 
-public class WeaponManager : MonoBehaviour {
+public class WeaponManager : MBSingleton<WeaponManager> {
 
 	public enum Weapons
 	{
-		Standard,
+		Pistol,
+		Uzi,
 		Last
 	}
 
 	Weapon[] weaponTable;
 
-	void SwitchWeapon(Weapons weaponType)
+	public void SwitchWeapon(Weapons weaponType)
 	{
 		Weapon weapon = weaponTable [(int)weaponType];
 		if (weapon.available) {
@@ -42,30 +43,42 @@ public class WeaponManager : MonoBehaviour {
 				weapon.power,
 				weapon.continousFire,
 				weapon.shootPerSecond);
+			//TODO GUI weapon change & display graphic
 		}
 	}
 
-	void AtivateWeapon(Weapons weaponType)
+	public void AtivateWeapon(Weapons weaponType)
 	{
 		Weapon weapon = weaponTable [(int)weaponType];
 		weapon.available = true;
 	}
 
 	// Use this for initialization
-	void Start () 
+	void Start ()
 	{
-		weaponTable = new Weapon[Weapons.Last];
+		weaponTable = new Weapon[(int)Weapons.Last];
 
-		weaponTable[(int)Weapons.Standard] = 
+		weaponTable[(int)Weapons.Pistol] = 
 			new Weapon{ 
-			name = "",
+			name = "Pistol",
 			maxAmmo=100, 
 			reloadTime=1.0f, 
 			power=1, 
-			continousFire=true,
-			shootPerSecond=2,
+			continousFire=false,
+			shootPerSecond=1,
 			available=true
 			};
+
+		weaponTable[(int)Weapons.Uzi] = 
+			new Weapon{ 
+			name = "Uzi",
+			maxAmmo = 100, 
+			reloadTime = 1.0f, 
+			power = 1, 
+			continousFire = true,
+			shootPerSecond = 4,
+			available=true
+		};
 	}
 
 	public Weapon[] GetWeaponTable()
@@ -75,7 +88,7 @@ public class WeaponManager : MonoBehaviour {
 
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
 		
 	}
