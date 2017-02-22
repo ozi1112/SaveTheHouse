@@ -10,7 +10,7 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
     void Start()
     {
-        
+
     }
 
     public void UpdateWeaponState(WeaponController.WeaponState state)
@@ -34,6 +34,7 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 	{
 		return WeaponManager.instance.GetWeaponTable ();
 	}
+
 }
 
 

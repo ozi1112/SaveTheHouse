@@ -188,6 +188,7 @@ public class WeaponController : MBSingleton<WeaponController>
 		weaponState = WeaponState.Reloading;
 		yield return new WaitForSeconds (reloadTime);
 		currentAmmo = maxAmmo;
+		weaponState = WeaponState.Idle;
 	}
 
 	bool IsFullAmmo()

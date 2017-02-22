@@ -14,8 +14,6 @@ public class GUIShop : MBSingleton<GUIShop>
 	{
 
     }
-
-
 }
 
 

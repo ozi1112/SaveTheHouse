@@ -20,11 +20,10 @@ public class Weapon
 	public int power;
 	public bool continousFire;
 	public int shootPerSecond;
-
 	/// <summary>
-	/// Bought?
+	/// Use Activate() to make weapon possible to use
 	/// </summary>
-	public bool available;
+	public bool active = false;
 
 	Sprite _icon;
 
@@ -85,19 +84,24 @@ public class WeaponManager : MBSingleton<WeaponManager>
 	}
 
 	Weapon[] weaponTable;
-	WeaponType _activeWeapon;
+	WeaponType _currentWeapon;
 
-	WeaponType activeWeapon
+
+	
+	///<summary>
+	/// Currently active weapon
+	///<summary>
+	WeaponType currentWeapon
 	{
 		get{
-			return _activeWeapon;
+			return _currentWeapon;
 		}
 		set{
-			_activeWeapon = value;
+			_currentWeapon = value;
             //update GUI
             if (GUIWeapon.instance != null)
             {
-                GUIWeapon.instance.WeaponChange(_activeWeapon);
+                GUIWeapon.instance.WeaponChange(_currentWeapon);
             }
             else
             {
@@ -108,11 +112,15 @@ public class WeaponManager : MBSingleton<WeaponManager>
 	}
 
 
+	
+	///<summary>
+	/// Switch current weapon 
+	///<summary>
 	public void SwitchWeapon(WeaponType weaponType)
 	{
 		Weapon weapon = weaponTable [(int)weaponType];
-		if (weapon.available) {
-			activeWeapon = weaponType;
+		if (weapon.active) {
+			currentWeapon = weaponType;
 			GetComponent<WeaponController> ().SetWeaponParams (weapon.maxAmmo, 
 				weapon.reloadTime, 
 				weapon.power,
@@ -124,9 +132,9 @@ public class WeaponManager : MBSingleton<WeaponManager>
 
 	public void AtivateWeapon(WeaponType weaponType)
 	{
-		activeWeapon = weaponType;
+		currentWeapon = weaponType;
 		Weapon weapon = weaponTable [(int)weaponType];
-		weapon.available = true;
+		weapon.active = true;
 	}
 
 	// Use this for initialization
@@ -142,7 +150,7 @@ public class WeaponManager : MBSingleton<WeaponManager>
 			power=1, 
 			continousFire=false,
 			shootPerSecond=1,
-			available=true
+			active=true
 			};
 
 		weaponTable[(int)WeaponType.Uzi] = 
@@ -153,7 +161,7 @@ public class WeaponManager : MBSingleton<WeaponManager>
 			power = 1, 
 			continousFire = true,
 			shootPerSecond = 4,
-			available=true
+			active=true
 		};
 	}
 
