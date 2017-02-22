@@ -26,8 +26,8 @@ ExportedObj/
 
 
 
-# Unity3D generated meta files
-*.meta
+# Unity3D generated meta files - missing scripts
+#*.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt

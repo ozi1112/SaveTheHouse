@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyController : MonoBehaviour, IHealth
 {
+	
 	public float speedMax = 1;
 	public float speed = 1;
 

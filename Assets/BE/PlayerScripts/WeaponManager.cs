@@ -8,19 +8,74 @@ using UnityEngine;
 [RequireComponent(typeof(WeaponController))]
 public class Weapon
 {
+	/// <summary>
+	/// Weapon name - should be the same as sprite and audioName.
+	/// icon - images / 'name'
+	/// audioReload - sounds / 'name'Reload
+	/// audioShoot - sounds / 'name'Shoot
+	/// </summary>
 	public string name;
 	public int maxAmmo;
 	public float reloadTime;
 	public int power;
 	public bool continousFire;
 	public int shootPerSecond;
+
 	/// <summary>
 	/// Bought?
 	/// </summary>
 	public bool available;
+
+	Sprite _icon;
+
+	public Sprite icon
+	{
+		get
+		{
+			if(_icon == null)
+			{
+				_icon = Resources.Load<Sprite>(string.Format("images/{0}", name));
+				if(_icon == null)
+				{
+					Debug.LogError("NULL resource not found" + string.Format("images/{0}", name));
+				}
+			}
+			return _icon;
+		}
+	}
+
+	AudioClip _audioReload;
+
+	public AudioClip audioReload
+	{
+		get
+		{
+			if(_audioReload == null)
+			{
+				_audioReload = Resources.Load(string.Format("sounds/{0}Reload", name)) as AudioClip;
+			}
+			return _audioReload;
+		}
+	}
+
+	AudioClip _audioShoot;
+
+	public AudioClip audioShoot
+	{
+		get
+		{
+			if(_audioShoot == null)
+			{
+				_audioShoot = Resources.Load(string.Format("sounds/{0}Shoot", name)) as AudioClip;
+			}
+			return _audioShoot;
+		}
+	}
+
 }
 
-public class WeaponManager : MBSingleton<WeaponManager> {
+public class WeaponManager : MBSingleton<WeaponManager> 
+{
 
 	public enum WeaponType
 	{

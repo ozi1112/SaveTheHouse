@@ -108,8 +108,7 @@ public class WeaponController : MBSingleton<WeaponController>
 		}
 	}
 
-	public void SetWeaponParams(int maxAmmo, float reloadTime, int power, bool continousFire, int shootPerSecond, 
-								AudioClip clipShoot = null, AudioClip clipReload = null)
+	public void SetWeaponParams(int maxAmmo, float reloadTime, int power, bool continousFire, int shootPerSecond)
 	{
 		this.maxAmmo = maxAmmo;
 		this.currentAmmo = maxAmmo;
@@ -117,8 +116,6 @@ public class WeaponController : MBSingleton<WeaponController>
 		this.power = power;
 		this.continousFire = continousFire;
 		this.shootPerSecond = shootPerSecond;
-		this.clipReload = clipReload;
-		this.clipShoot = clipShoot;
 	}
 
 	public void StopShooting()

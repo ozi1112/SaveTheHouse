@@ -8,6 +8,11 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
     public Text ammoText;
     public Image weaponImage;
 
+    void Start()
+    {
+        
+    }
+
     public void UpdateWeaponState(WeaponController.WeaponState state)
 	{
 		
@@ -15,8 +20,9 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
 	public void WeaponChange (WeaponManager.WeaponType activeWeapon)
 	{
-        //weaponImage.
-        //Weapon[] table = GetWeaponTable()[(int)activeWeapon];
+        Debug.Log(string.Format("Change weapon {0}", activeWeapon.ToString()));
+        Weapon weapon = GetWeaponTable()[(int)activeWeapon];
+        weaponImage.sprite = weapon.icon;
     }
 
     public void WeaponAmmoChange(int current, int capacity)
