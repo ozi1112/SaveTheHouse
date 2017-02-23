@@ -35,7 +35,9 @@ public class GUIShop : MBSingleton<GUIShop>
 		ReloadItems();
 	}
 
-
+	/// <summary>
+	/// Use for refresh weapon list.
+	/// </summary>
 	void ReloadItems()
 	{
 		Weapon[] weaponTable = WeaponManager.instance.GetWeaponTable ();
@@ -50,6 +52,9 @@ public class GUIShop : MBSingleton<GUIShop>
 		}
 	}
 
+	/// <summary>
+	/// Select an item and show details in 'details' panel.
+	/// </summary>
 	public void OnItemSelected(WeaponManager.WeaponType weaponType)
 	{
 		Weapon[] weaponTable = WeaponManager.instance.GetWeaponTable ();
@@ -80,8 +85,6 @@ public class GUIShop : MBSingleton<GUIShop>
 			btnBuy.gameObject.SetActive(false);
 		}
 	}
-
-
 }
 
 
