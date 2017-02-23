@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(WeaponController))]
 public class Weapon
 {
+	public WeaponManager.WeaponType type; 
 	/// <summary>
 	/// Weapon name - should be the same as sprite and audioName.
 	/// icon - images / 'name'
@@ -24,6 +25,8 @@ public class Weapon
 	/// Use Activate() to make weapon possible to use
 	/// </summary>
 	public bool active = false;
+
+	public int price;
 
 	Sprite _icon;
 
@@ -138,30 +141,34 @@ public class WeaponManager : MBSingleton<WeaponManager>
 	}
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		weaponTable = new Weapon[(int)WeaponType.Last];
 
 		weaponTable[(int)WeaponType.Pistol] = 
 			new Weapon{ 
+			type = WeaponType.Pistol,
 			name = "Pistol",
 			maxAmmo=100, 
 			reloadTime=1.0f, 
 			power=1, 
 			continousFire=false,
 			shootPerSecond=1,
-			active=true
+			active=true,
+			price=200
 			};
 
 		weaponTable[(int)WeaponType.Uzi] = 
 			new Weapon{ 
+			type = WeaponType.Uzi,
 			name = "Uzi",
 			maxAmmo = 100, 
 			reloadTime = 1.0f, 
 			power = 1, 
 			continousFire = true,
 			shootPerSecond = 4,
-			active=true
+			active=true,
+			price=100
 		};
 	}
 
