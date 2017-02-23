@@ -26,6 +26,7 @@ public class UIShopItem : MonoBehaviour {
 
 	void OnMouseDown()
 	{
+		Debug.Log("Mouse down");
 		GUIShop.instance.OnItemSelected(weaponType);
 	}
 
