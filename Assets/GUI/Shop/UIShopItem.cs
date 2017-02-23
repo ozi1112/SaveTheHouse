@@ -31,7 +31,7 @@ public class UIShopItem : MonoBehaviour {
 
 	void OnEquipClick()
 	{
-
+		WeaponManager.instance.SwitchWeapon(weaponType);
 	}
 
 	void OnBuyClick()
