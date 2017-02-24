@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(ToggleGroup))]
 
-
-
+[System.Serializable]
 public class WeaponController : MBSingleton<WeaponController> 
 {
 
@@ -38,6 +39,7 @@ public class WeaponController : MBSingleton<WeaponController>
 		}
 	}
     
+	[SerializeField]
     int _currentAmmo = 100;
     public int currentAmmo
     {
@@ -60,6 +62,7 @@ public class WeaponController : MBSingleton<WeaponController>
         }
     }
 
+	[SerializeField]
     int _maxAmmo = 100;
     public int maxAmmo
     {
@@ -130,6 +133,7 @@ public class WeaponController : MBSingleton<WeaponController>
 		{
 			StopAllCoroutines ();
 			StartCoroutine (CoReload());
+			stopShootingRequest = false;
 		}
 	}
 
@@ -161,7 +165,7 @@ public class WeaponController : MBSingleton<WeaponController>
 
 
 		if (continousFire) {
-			yield return new WaitForSeconds (1/shootPerSecond);
+			yield return new WaitForSeconds (1.0f/shootPerSecond);
 		} else {
 			weaponState = WeaponState.Idle;
 		}

@@ -10,12 +10,36 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
     void Start()
     {
+        UpdateWeaponAmmo();
+    }
 
+    void UpdateWeaponAmmo()
+    {
+        ammoText.text = string.Format(
+        "{0} / {1}", 
+        WeaponController.instance.currentAmmo,  
+        WeaponController.instance.maxAmmo);
     }
 
     public void UpdateWeaponState(WeaponController.WeaponState state)
 	{
-		
+		switch(state)
+        {
+            case WeaponController.WeaponState.Idle:
+            {
+                break;
+            }
+             case WeaponController.WeaponState.Reloading:
+            {
+                //Animate reload
+                break;
+            }
+             case WeaponController.WeaponState.Shooting:
+            {
+                break;
+            }
+        }
+
 	}
 
 	public void WeaponChange (WeaponManager.WeaponType activeWeapon)

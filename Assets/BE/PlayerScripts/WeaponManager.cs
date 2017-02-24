@@ -166,8 +166,8 @@ public class WeaponManager : MBSingleton<WeaponManager>
 			reloadTime = 1.0f, 
 			power = 1, 
 			continousFire = true,
-			shootPerSecond = 4,
-			active=true,
+			shootPerSecond = 5,
+			active=false,
 			price=100
 		};
 	}

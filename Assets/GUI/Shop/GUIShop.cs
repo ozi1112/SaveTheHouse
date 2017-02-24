@@ -33,6 +33,11 @@ public class GUIShop : MBSingleton<GUIShop>
 	void Start()
 	{
 		ReloadItems();
+
+		//Select Pistol
+		var toggle = shopItems[(int)WeaponManager.WeaponType.Pistol].GetComponent<Toggle>();
+		toggle.onValueChanged.Invoke(true);
+		toggle.Select();
 	}
 
 	/// <summary>
@@ -61,11 +66,9 @@ public class GUIShop : MBSingleton<GUIShop>
 
 		imgWeapon.sprite = weaponTable[(int)weaponType].icon;
 		txtWpnDesc.text = string.Format(
-			@"
-			Power: 	{0} \n
-			Speed:	{1} \n
-			Ammo:	{2} \n
-			",
+		   "Power: 	{0}" + Environment.NewLine +
+			"Speed:	{1}" + Environment.NewLine +
+			"Ammo:	{2}" + Environment.NewLine,
 			weaponTable[(int)weaponType].power,
 			weaponTable[(int)weaponType].shootPerSecond,
 			weaponTable[(int)weaponType].maxAmmo);
@@ -75,13 +78,23 @@ public class GUIShop : MBSingleton<GUIShop>
 		//Not bought 
 		if(!weaponTable[(int)weaponType].active)
 		{
-			btnBuy.onClick.AddListener( () => { WeaponManager.instance.AtivateWeapon(weaponType); } );
+			btnBuy.onClick.AddListener( () => { 
+				if(PlayerController.instance.SpendMoney(weaponTable[(int)weaponType].price))
+				{
+					btnEquip.gameObject.SetActive(true);
+					btnBuy.gameObject.SetActive(false);
+					WeaponManager.instance.AtivateWeapon(weaponType);
+				}
+			} );
+			
+			btnBuy.gameObject.SetActive(true);
 			btnEquip.gameObject.SetActive(false);
 		}
 		//Bought
 		else
 		{
 			btnEquip.onClick.AddListener( () => { WeaponManager.instance.SwitchWeapon(weaponType); } );
+			btnEquip.gameObject.SetActive(true);
 			btnBuy.gameObject.SetActive(false);
 		}
 	}

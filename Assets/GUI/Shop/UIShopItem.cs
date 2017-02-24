@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Toggle))]
 
 public class UIShopItem : MonoBehaviour {
 
@@ -13,6 +15,7 @@ public class UIShopItem : MonoBehaviour {
 
 	public void Initialize(Weapon weapon)
 	{
+		gameObject.GetComponent<Toggle>().onValueChanged.AddListener(OnSelect);
 		this.weaponType = weapon.type;
 		this.price = weapon.price;
 		GetComponent<Image>().sprite = weapon.icon;
@@ -22,11 +25,12 @@ public class UIShopItem : MonoBehaviour {
 			//TODO
 			//highlight or something
 		}
+
+		gameObject.AddComponent(typeof(BoxCollider2D));
 	}
 
-	void OnMouseDown()
+	void OnSelect(bool isSelect)
 	{
-		Debug.Log("Mouse down");
 		GUIShop.instance.OnItemSelected(weaponType);
 	}
 
