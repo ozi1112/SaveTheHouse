@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class EnemyController : MonoBehaviour, IHealth
 {
@@ -36,7 +37,8 @@ public class EnemyController : MonoBehaviour, IHealth
 	public void StartAttack()
 	{
 		StopMove ();
-		//TODO
+		//TODO play anim + deal damage
+		
 	}
 
 	void OnCollisionEnter(Collision collision) 
@@ -48,7 +50,7 @@ public class EnemyController : MonoBehaviour, IHealth
 	public void Die ()
 	{
 		StopMove ();
-		//throw new System.NotImplementedException ();
+		//TODO start die animation + destroyObject
 	}
 	#endregion
 }
