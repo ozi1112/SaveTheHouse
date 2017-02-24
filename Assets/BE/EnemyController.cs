@@ -3,54 +3,74 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour, IHealth
 {
-	
-	public float speedMax = 1;
-	public float speed = 1;
+    ///<summary>
+    /// Maximum possible speed.
+    ///</summary>
+    public float speedMax = 1;
 
-	public float attackPower = 1;
-	public float attackSpeed = 1;
+    ///<summary>
+    /// Current speed.
+    ///</summary>
+    public float speed = 1;
 
-	new Rigidbody rigidbody;
+    ///<summary>
+    /// Specifies how much damage deals in sigle attack.
+    ///</summary>
+    public float attackPower = 1;
 
-	// Use this for initialization
-	void Start ()
-	{
-		rigidbody = GetComponent<Rigidbody> ();
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
-	{
-		rigidbody.velocity = Vector3.right * speed;
-	}
+    ///<summary>
+    /// Specifies how attack speed.
+    ///</summary>
+    public float attackSpeed = 1;
 
-	public void StartMove()
-	{
-		speed = speedMax;
-	}
+    new Rigidbody rigidbody;
 
-	public void StopMove()
-	{
-		speed = 0;
-	}
+    public void StartMove()
+    {
+        speed = speedMax;
+    }
 
-	public void StartAttack()
-	{
-		StopMove ();
-		//TODO play anim + deal damage
-		
-	}
+    public void StopMove()
+    {
+        speed = 0;
+    }
 
-	void OnCollisionEnter(Collision collision) 
-	{
-		StartAttack ();
-	}
+    public void StartAttack()
+    {
+        StopMove();
+        //TODO play anim + deal damage
 
-	#region IHealth implementation
-	public void Die ()
-	{
-		StopMove ();
-		//TODO start die animation + destroyObject
-	}
-	#endregion
+    }
+
+    #region MonoBehaviourImplementation
+
+    // Use this for initialization
+    void Start()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        rigidbody.velocity = Vector3.right * speed;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(0 == collision.collider.tag.CompareTo("Player"))
+        {
+            StartAttack();
+        }
+    }
+
+    #endregion
+
+    #region IHealth implementation
+    public void Die()
+    {
+        StopMove();
+        //TODO start die animation + destroyObject
+    }
+    #endregion
 }
