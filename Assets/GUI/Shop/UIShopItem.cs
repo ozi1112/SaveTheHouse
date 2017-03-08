@@ -11,7 +11,7 @@ public class UIShopItem : MonoBehaviour {
 
 	bool _bought = false;
 	public int price;
-	WeaponManager.WeaponType weaponType;
+	WeaponType weaponType;
 
 	public void Initialize(Weapon weapon)
 	{
@@ -36,12 +36,12 @@ public class UIShopItem : MonoBehaviour {
 
 	void OnEquipClick()
 	{
-		WeaponManager.instance.SwitchWeapon(weaponType);
+		WeaponManager.instance.UpdateWeapon(weaponType);
 	}
 
 	void OnBuyClick()
 	{
-		if(PlayerController.instance.SpendMoney(price))
+		if(PlayerController.instance.wallet.SpendMoney(price))
 		{
 			WeaponManager.instance.AtivateWeapon(weaponType);
 		}

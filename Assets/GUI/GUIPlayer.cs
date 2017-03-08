@@ -9,7 +9,7 @@ public class GUIPlayer : MBSingleton<GUIPlayer> {
 
     private void Start()
     {
-        MoneyChange(PlayerController.instance.CurrentMoney);
+        MoneyChange(PlayerController.instance.wallet.currentMoney.val);
     }
 
     //CALLBACKS
@@ -25,6 +25,6 @@ public class GUIPlayer : MBSingleton<GUIPlayer> {
 	//COMMANDS
 	public bool SpendMoney(int value)
 	{
-		return PlayerController.instance.SpendMoney (value);
+		return PlayerController.instance.wallet.SpendMoney (value);
 	}
 }

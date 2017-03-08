@@ -35,7 +35,7 @@ public class GUIShop : MBSingleton<GUIShop>
 		ReloadItems();
 
 		//Select Pistol
-		var toggle = shopItems[(int)WeaponManager.WeaponType.Pistol].GetComponent<Toggle>();
+		var toggle = shopItems[(int)WeaponType.Pistol].GetComponent<Toggle>();
 		toggle.onValueChanged.Invoke(true);
 		toggle.Select();
 	}
@@ -60,7 +60,7 @@ public class GUIShop : MBSingleton<GUIShop>
 	/// <summary>
 	/// Select an item and show details in 'details' panel.
 	/// </summary>
-	public void OnItemSelected(WeaponManager.WeaponType weaponType)
+	public void OnItemSelected(WeaponType weaponType)
 	{
 		Weapon[] weaponTable = WeaponManager.instance.GetWeaponTable ();
 
@@ -79,7 +79,7 @@ public class GUIShop : MBSingleton<GUIShop>
 		if(!weaponTable[(int)weaponType].active)
 		{
 			btnBuy.onClick.AddListener( () => { 
-				if(PlayerController.instance.SpendMoney(weaponTable[(int)weaponType].price))
+				if(PlayerController.instance.wallet.SpendMoney(weaponTable[(int)weaponType].price))
 				{
 					btnEquip.gameObject.SetActive(true);
 					btnBuy.gameObject.SetActive(false);
@@ -93,7 +93,7 @@ public class GUIShop : MBSingleton<GUIShop>
 		//Bought
 		else
 		{
-			btnEquip.onClick.AddListener( () => { WeaponManager.instance.SwitchWeapon(weaponType); } );
+			btnEquip.onClick.AddListener( () => { WeaponManager.instance.UpdateWeapon(weaponType); } );
 			btnEquip.gameObject.SetActive(true);
 			btnBuy.gameObject.SetActive(false);
 		}

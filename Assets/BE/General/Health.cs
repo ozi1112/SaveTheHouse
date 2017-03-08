@@ -1,9 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[RequireComponent(typeof(EnemyController))]
-
 
 ///<summary>
 /// Class controls target healh and calls Die function if dead.
@@ -13,11 +10,11 @@ public class Health : MonoBehaviour
 	///<summary>
 	/// Maximum possible health.
 	///</summary>
-	public int maximum = 100;
+	public EventProperty<int> maximum = new EventProperty<int>(100);
 	///<summary>
 	/// Current health.
 	///</summary>
-	public int current = 100;
+	public EventProperty<int> current = new EventProperty<int>(100);
 
 	///<summary>
 	/// Deal damage.
@@ -28,11 +25,11 @@ public class Health : MonoBehaviour
 	public bool Loss(int value)
 	{
 		bool retVal = false;
-		current -= value;
-		if (current < 0) 
+		current.val -= value;
+		if (current.val < 0) 
 		{
 			retVal = true;
-			current = 0;
+			current.val = 0;
 			IHealth iHealth = GetComponent<IHealth> ();
 			if(iHealth != null)
 			{
@@ -44,8 +41,6 @@ public class Health : MonoBehaviour
 			}
 		}
 		return retVal;
-
-
 	}
 
 	///<summary>
@@ -56,10 +51,9 @@ public class Health : MonoBehaviour
 	/// </param>
 	public void Gain(int value)
 	{
-		current += value;
-		if (current > maximum)
-			current = maximum;
+		current.val += value;
+		if (current.val > maximum.val)
+			current.val = maximum.val;
 	}
-
 
 }

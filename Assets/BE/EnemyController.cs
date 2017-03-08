@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
+
 public class EnemyController : MonoBehaviour, IHealth
 {
     ///<summary>
@@ -19,7 +21,7 @@ public class EnemyController : MonoBehaviour, IHealth
     public float attackPower = 1;
 
     ///<summary>
-    /// Specifies how attack speed.
+    /// Specifies attack speed.
     ///</summary>
     public float attackSpeed = 1;
 

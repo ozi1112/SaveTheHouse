@@ -10,6 +10,9 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
     void Start()
     {
+        PlayerController.instance.weaponController.currentAmmo.OnChange += UpdateWeaponAmmo;
+        PlayerController.instance.weaponController.maxAmmo.OnChange += UpdateWeaponAmmo;
+        PlayerController.instance.weaponManager.currentWeapon.OnChange += WeaponChange;
         UpdateWeaponAmmo();
     }
 
@@ -17,8 +20,8 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
     {
         ammoText.text = string.Format(
         "{0} / {1}", 
-        WeaponController.instance.currentAmmo,  
-        WeaponController.instance.maxAmmo);
+        PlayerController.instance.weaponController.currentAmmo.val,  
+        PlayerController.instance.weaponController.maxAmmo.val);
     }
 
     public void UpdateWeaponState(WeaponController.WeaponState state)
@@ -42,16 +45,12 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
 	}
 
-	public void WeaponChange (WeaponManager.WeaponType activeWeapon)
+	public void WeaponChange ()
 	{
+        WeaponType activeWeapon = PlayerController.instance.weaponManager.currentWeapon.val;
         Debug.Log(string.Format("Change weapon {0}", activeWeapon.ToString()));
         Weapon weapon = GetWeaponTable()[(int)activeWeapon];
         weaponImage.sprite = weapon.icon;
-    }
-
-    public void WeaponAmmoChange(int current, int capacity)
-	{
-        ammoText.text = string.Format("{0} / {1}", current, capacity);
     }
 
 	public Weapon[] GetWeaponTable()
