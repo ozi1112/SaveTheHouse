@@ -17,6 +17,10 @@ public class GUIShop : MBSingleton<GUIShop>
 	/// </summary>
 	public Button btnEquip;
 	/// <summary>
+	/// 
+	/// </summary>
+	public Button btnUpgrade;
+	/// <summary>
 	/// Image weapon .
 	/// </summary>
 	public Image imgWeapon;
@@ -69,19 +73,21 @@ public class GUIShop : MBSingleton<GUIShop>
 		   "Power: 	{0}" + Environment.NewLine +
 			"Speed:	{1}" + Environment.NewLine +
 			"Ammo:	{2}" + Environment.NewLine,
-			weaponTable[(int)weaponType].power,
-			weaponTable[(int)weaponType].shootPerSecond,
-			weaponTable[(int)weaponType].maxAmmo);
+			weaponTable[(int)weaponType].GetWeaponParams().power,
+			weaponTable[(int)weaponType].GetWeaponParams().shootPerSecond,
+			weaponTable[(int)weaponType].GetWeaponParams().maxAmmo);
 
 		btnBuy.onClick.RemoveAllListeners();
 		btnEquip.onClick.RemoveAllListeners();
+		btnUpgrade.onClick.RemoveAllListeners();
 		//Not bought 
-		if(!weaponTable[(int)weaponType].active)
+		if(!weaponTable[(int)weaponType].m_Active)
 		{
 			btnBuy.onClick.AddListener( () => { 
-				if(PlayerController.instance.wallet.SpendMoney(weaponTable[(int)weaponType].price))
+				if(PlayerController.instance.wallet.SpendMoney(weaponTable[(int)weaponType].m_Price))
 				{
 					btnEquip.gameObject.SetActive(true);
+					btnUpgrade.gameObject.SetActive(true);
 					btnBuy.gameObject.SetActive(false);
 					WeaponManager.instance.AtivateWeapon(weaponType);
 				}
@@ -89,13 +95,27 @@ public class GUIShop : MBSingleton<GUIShop>
 			
 			btnBuy.gameObject.SetActive(true);
 			btnEquip.gameObject.SetActive(false);
+			btnUpgrade.gameObject.SetActive(false);
 		}
 		//Bought
 		else
 		{
 			btnEquip.onClick.AddListener( () => { WeaponManager.instance.UpdateWeapon(weaponType); } );
 			btnEquip.gameObject.SetActive(true);
+
+			btnUpgrade.onClick.AddListener(
+			()=>{ 
+				if(PlayerController.instance.wallet.SpendMoney(weaponTable[(int)weaponType].m_Price))
+				{
+					WeaponManager.instance.GetWeapon(weaponType).UpgradeWeapon(); 
+					OnItemSelected(weaponType); 
+				}
+				
+			} );
+			btnUpgrade.gameObject.SetActive(true);
+
 			btnBuy.gameObject.SetActive(false);
+			
 		}
 	}
 }

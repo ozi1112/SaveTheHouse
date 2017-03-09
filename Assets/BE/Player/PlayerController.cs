@@ -27,4 +27,14 @@ public class PlayerController : MBSingleton<PlayerController>, IHealth
     {
         OnDie.Invoke();
     }
+
+    public void SaveGameState()
+    {
+
+    }
+
+    public void LoadGameState()
+    {
+        
+    }
 }

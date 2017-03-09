@@ -17,10 +17,10 @@ public class UIShopItem : MonoBehaviour {
 	{
 		gameObject.GetComponent<Toggle>().onValueChanged.AddListener(OnSelect);
 		this.weaponType = weapon.type;
-		this.price = weapon.price;
+		this.price = weapon.m_Price;
 		GetComponent<Image>().sprite = weapon.icon;
 
-		if(weapon.active)
+		if(weapon.m_Active)
 		{
 			//TODO
 			//highlight or something
@@ -45,6 +45,16 @@ public class UIShopItem : MonoBehaviour {
 		{
 			WeaponManager.instance.AtivateWeapon(weaponType);
 		}
+	}
+
+	void OnUpgradeClick()
+	{
+		if(PlayerController.instance.wallet.SpendMoney(price))
+		{
+			WeaponManager.instance.GetWeapon(weaponType).UpgradeWeapon();
+		}
+		//refresh gui
+		GUIShop.instance.OnItemSelected(weaponType);
 	}
 
 	

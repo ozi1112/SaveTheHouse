@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Wallet : MonoBehaviour
 {
-    public EventProperty <int> currentMoney = new EventProperty <int> (100);
+    public EventProperty <int> currentMoney = new EventProperty <int> (1000);
 
 	public void EarnMoney(int value)
 	{
@@ -18,6 +18,10 @@ public class Wallet : MonoBehaviour
 		if (retVal) 
 		{
 			currentMoney.val -= value;
+		}
+		else
+		{
+			Debug.Log(string.Format("SpendMoney not enough cur:{0} val:{1}", currentMoney.val, value));
 		}
 		return retVal;
 	}

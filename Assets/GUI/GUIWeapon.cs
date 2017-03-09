@@ -10,8 +10,8 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
 
     void Start()
     {
-        PlayerController.instance.weaponController.currentAmmo.OnChange += UpdateWeaponAmmo;
-        PlayerController.instance.weaponController.maxAmmo.OnChange += UpdateWeaponAmmo;
+        PlayerController.instance.weaponController.m_CurrentAmmo.OnChange += UpdateWeaponAmmo;
+        PlayerController.instance.weaponController.m_MaxAmmo.OnChange += UpdateWeaponAmmo;
         PlayerController.instance.weaponManager.currentWeapon.OnChange += WeaponChange;
         UpdateWeaponAmmo();
     }
@@ -20,24 +20,24 @@ public class GUIWeapon : MBSingleton<GUIWeapon>  {
     {
         ammoText.text = string.Format(
         "{0} / {1}", 
-        PlayerController.instance.weaponController.currentAmmo.val,  
-        PlayerController.instance.weaponController.maxAmmo.val);
+        PlayerController.instance.weaponController.m_CurrentAmmo.val,  
+        PlayerController.instance.weaponController.m_MaxAmmo.val);
     }
 
-    public void UpdateWeaponState(WeaponController.WeaponState state)
+    public void UpdateWeaponState(WeaponController.eWeaponState state)
 	{
 		switch(state)
         {
-            case WeaponController.WeaponState.Idle:
+            case WeaponController.eWeaponState.Idle:
             {
                 break;
             }
-             case WeaponController.WeaponState.Reloading:
+             case WeaponController.eWeaponState.Reloading:
             {
                 //Animate reload
                 break;
             }
-             case WeaponController.WeaponState.Shooting:
+             case WeaponController.eWeaponState.Shooting:
             {
                 break;
             }

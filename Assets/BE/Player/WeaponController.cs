@@ -8,89 +8,83 @@ using UnityEngine.UI;
 [System.Serializable]
 public class WeaponController : MonoBehaviour
 {
-	AudioClip clipShoot, clipReload;
-
-	public enum WeaponState
+	public enum eWeaponState
 	{
 		Idle,
 		Shooting,
 		Reloading
 	}
 
-	
-    EventProperty<WeaponState> weaponState = new EventProperty<WeaponState>(WeaponState.Idle);
+	AudioClip m_ClipShoot, m_ClipReload;
+
+    EventProperty<eWeaponState> m_WeaponState = new EventProperty<eWeaponState>(eWeaponState.Idle);
    
-	public EventProperty<int> currentAmmo = new EventProperty<int>(100);
+	public EventProperty<int> m_CurrentAmmo = new EventProperty<int>(100);
     
-	public EventProperty<int> maxAmmo = new EventProperty<int>(100);
+	public EventProperty<int> m_MaxAmmo = new EventProperty<int>(100);
 
-    bool stopShootingRequest = false;
-
-    float reloadTime = 1;
+    float m_ReloadTime = 1;
 	/// <summary>
 	/// Weapon power - can't be 0.
 	/// </summary>
-	int power = 1;
+	int m_Power = 1;
 
-	bool continousFire = false;
-	float shootPerSecond = 10;
+	bool m_ContinousFire = false;
+	float m_ShootPerSecond = 10;
 
 	void FixedUpdate()
 	{
-		if(Input.GetButtonDown("Fire"))
+		if(m_WeaponState.val != eWeaponState.Reloading)
 		{
-			StartShooting();
-		}
-		else if(Input.GetButtonUp("Fire"))
-		{
-			StopShooting();
-		}
-		else if(Input.GetButtonDown("Reload"))
-		{
-			Reload();
-		}
-	}
-
-	public void StartShooting()
-	{
-		stopShootingRequest = false;
-		if(weaponState.val == WeaponState.Idle)
-		{
-			if (continousFire) {
-				StartCoroutine (CoContinousFire());
-			} else {
-				StartCoroutine (CoShoot());
+			//Single shoot weapon can shoot faster on click spam
+			if(Input.GetButtonDown("Fire") && !m_ContinousFire)
+			{
+				Shoot();
+			}
+			else if(Input.GetButton("Fire"))
+			{
+				if(m_WeaponState.val != eWeaponState.Shooting)
+				{
+					Shoot();
+				}
+			}
+			
+			
+			if(Input.GetButton("Reload"))
+			{
+				Reload();
 			}
 		}
 	}
 
+
 	public void SetWeaponParams(int maxAmmo, float reloadTime, int power, bool continousFire, float shootPerSecond)
 	{
-		this.maxAmmo.val = maxAmmo;
-		this.currentAmmo.val = maxAmmo;
-		this.reloadTime = reloadTime;
-		this.power = power;
-		this.continousFire = continousFire;
-		this.shootPerSecond = shootPerSecond;
+		Debug.Log(string.Format("{0} {1} {2} {3} {4}", maxAmmo, reloadTime, power, continousFire, shootPerSecond));
+		this.m_MaxAmmo.val = maxAmmo;
+		this.m_CurrentAmmo.val = maxAmmo;
+		this.m_ReloadTime = reloadTime;
+		this.m_Power = power;
+		this.m_ContinousFire = continousFire;
+		this.m_ShootPerSecond = shootPerSecond;
 	}
 
-	public void StopShooting()
+
+	void Shoot()
 	{
-		//Request to break shooting loop
-		stopShootingRequest = true;
+		StartCoroutine (CoShoot());
 	}
 
-	public void Reload()
+	void Reload()
 	{
 		if(!IsFullAmmo())
 		{
 			StopAllCoroutines ();
 			StartCoroutine (CoReload());
-			stopShootingRequest = false;
 		}
 	}
 
-	public void ShootTrigger()
+	void ShootTrigger()
 	{
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit[] hitObjects;
@@ -100,62 +94,46 @@ public class WeaponController : MonoBehaviour
 			Health hp = hit.collider.gameObject.GetComponent<Health> ();
 			if (hp != null) 
 			{
-				hp.Loss (power);
+				hp.Loss (m_Power);
 			}
 		}
 	}
 
 	IEnumerator CoShoot()
 	{
-		weaponState.val = WeaponState.Shooting;
-		if (currentAmmo.val > 0) 
+		m_WeaponState.val = eWeaponState.Shooting;
+		if (m_CurrentAmmo.val > 0) 
 		{
-			Debug.Log (string.Format("Shoot {0} / {1}", currentAmmo.val, maxAmmo.val));
+			Debug.Log (string.Format("Shoot {0} / {1}", m_CurrentAmmo.val, m_MaxAmmo.val));
 			ShootTrigger();
+			m_CurrentAmmo.val --;
 		}
-
-		currentAmmo.val --;
-		if (currentAmmo.val == 0) 
+		
+		if (m_CurrentAmmo.val <= 0) 
 		{
 			yield return CoReload ();
 		}
-		else if (continousFire) 
+		else
 		{
-			yield return new WaitForSeconds (1.0f/shootPerSecond);
-		} else 
-		{
-			weaponState.val = WeaponState.Idle;
-		}
-	}
-
-	IEnumerator CoContinousFire()
-	{
-		Debug.Log ("ContinousFire");
-		weaponState.val = WeaponState.Shooting;
-		while (!stopShootingRequest) 
-		{
-			yield return CoShoot ();
+			yield return new WaitForSeconds (1.0f/m_ShootPerSecond);
 		}
 
-		weaponState.val = WeaponState.Idle;
-		stopShootingRequest = false;
-
-		yield return 1;
+		m_WeaponState.val = eWeaponState.Idle;
+		
 	}
-
 
 	IEnumerator CoReload()
 	{
-		Debug.Log (string.Format( "Reload {0} / {1}", currentAmmo, maxAmmo ));
-		weaponState.val = WeaponState.Reloading;
-		yield return new WaitForSeconds (reloadTime);
-		currentAmmo = maxAmmo;
-		weaponState.val = WeaponState.Idle;
+			Debug.Log (string.Format( "Reload {0} / {1}", m_CurrentAmmo, m_MaxAmmo ));
+			m_WeaponState.val = eWeaponState.Reloading;
+			yield return new WaitForSeconds (m_ReloadTime);
+			m_CurrentAmmo.val = m_MaxAmmo.val;
+			m_WeaponState.val = eWeaponState.Idle;
 	}
 
 	bool IsFullAmmo()
 	{
-		return currentAmmo == maxAmmo;
+		return m_CurrentAmmo == m_MaxAmmo;
 	}
 
 

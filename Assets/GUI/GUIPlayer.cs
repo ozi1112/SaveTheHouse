@@ -3,28 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUIPlayer : MBSingleton<GUIPlayer> {
+public class GUIPlayer : MBSingleton<GUIPlayer> 
+{
 
-    public Text money;
+    public Text txtMoney;
+    public Text txtHealth;
+    public Health health;
+    public Wallet wallet;
 
     private void Start()
     {
-        MoneyChange(PlayerController.instance.wallet.currentMoney.val);
+        wallet.currentMoney.OnChange += OnMoneyChange;
+        OnMoneyChange();
+        health.current.OnChange += OnMoneyChange;
+        OnHealthChange();
+        
     }
 
     //CALLBACKS
-    public void HealthChange(int current, int max)
+    public void OnHealthChange()
 	{
-
+        txtMoney.text = health.current.val.ToString();
     }
-	public void MoneyChange(int current)
+	public void OnMoneyChange()
 	{
-        money.text = current.ToString();
+        txtMoney.text = wallet.currentMoney.val.ToString();
     }
 
 	//COMMANDS
 	public bool SpendMoney(int value)
 	{
-		return PlayerController.instance.wallet.SpendMoney (value);
+		return wallet.SpendMoney (value);
 	}
 }

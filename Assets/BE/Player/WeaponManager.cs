@@ -9,157 +9,7 @@ public enum WeaponType
 	Last
 }
 
-public class WeaponParams
-{
-	public int maxAmmo;
-	public float reloadTime;
-	public int power;
-	public int shootPerSecond;
-	public int cost;
-	bool continousFire;
 
-	public WeaponParams(
-	int maxAmmo, 
-	float reloadTime, 
-	int power, 
-	int shootPerSecond,
-	int cost,
-	bool continousFire
-	)
-	{
-		this.maxAmmo = maxAmmo;
-		this.reloadTime = reloadTime;
-		this.power = power;
-		this.shootPerSecond = shootPerSecond;
-		this.cost = cost;
-		this.continousFire = continousFire;
-	}
-}
-
-public abstract class Weapon
-{
-	public WeaponType type; 
-	/// <summary>
-	/// Weapon name - should be the same as sprite and audioName.
-	/// icon - images / 'name'
-	/// audioReload - sounds / 'name'Reload
-	/// audioShoot - sounds / 'name'Shoot
-	/// </summary>
-	public string name;
-	public int maxAmmo;
-	public float reloadTime;
-	public int power;
-	public bool continousFire;
-	public float shootPerSecond;
-	
-	/// <summary>
-	/// Use Activate() to make weapon possible to use
-	/// </summary>
-	public bool active = false;
-
-	public int price;
-
-	Sprite _icon;
-
-	public WeaponParams[] upgradeTable;
-
-	int upgradeLvl = 0;
-
-	public Sprite icon
-	{
-		get
-		{
-			if(_icon == null)
-			{
-				_icon = Resources.Load<Sprite>(string.Format("images/{0}", name));
-				if(_icon == null)
-				{
-					Debug.LogError("NULL resource not found" + string.Format("images/{0}", name));
-				}
-			}
-			return _icon;
-		}
-	}
-
-	AudioClip _audioReload;
-
-	public AudioClip audioReload
-	{
-		get
-		{
-			if(_audioReload == null)
-			{
-				_audioReload = Resources.Load(string.Format("sounds/{0}Reload", name)) as AudioClip;
-			}
-			return _audioReload;
-		}
-	}
-
-	AudioClip _audioShoot;
-
-	public AudioClip audioShoot
-	{
-		get
-		{
-			if(_audioShoot == null)
-			{
-				_audioShoot = Resources.Load(string.Format("sounds/{0}Shoot", name)) as AudioClip;
-			}
-			return _audioShoot;
-		}
-	}
-
-	public Weapon(	WeaponType type, 
-					string name, 
-					int maxAmmo, 
-					float reloadTime, 
-					int power, 
-					bool continousFire, 
-					float shootPerSecond, 
-					bool active, 
-					int price )
-	{
-		
-			this.type = type;
-			this.name = name;
-			this.maxAmmo = maxAmmo;
-			this.reloadTime = reloadTime; 
-			this.power = power;
-			this.continousFire = continousFire;
-			this.shootPerSecond = shootPerSecond;
-			this.active = active;
-			this.price = price;
-
-			upgradeTable = new WeaponParams[5];
-			upgradeTable[0] = new WeaponParams(20, 1, 1, 2, 100, true);
-			upgradeTable[1] = new WeaponParams(20, 1, 1, 2, 100, true);
-			upgradeTable[2] = new WeaponParams(20, 1, 1, 2, 100, true);
-			upgradeTable[3] = new WeaponParams(20, 1, 1, 2, 100, true);
-			upgradeTable[4] = new WeaponParams(20, 1, 1, 2, 100, true);
-	}
-
-	WeaponParams GetWeaponParams()
-	{
-		return upgradeTable[upgradeLvl];
-	}
-
-	bool UpgradeWeapon()
-	{
-		
-		if(upgradeLvl  == upgradeTable.Length - 1)
-		{
-			return false;
-		}
-		else
-		{
-			upgradeLvl += 1;
-			return true;
-		}
-			
-	}
-
-	
-}
 
 public class Uzi : Weapon
 {
@@ -181,16 +31,16 @@ public class Pistol : Weapon
 	base (WeaponType.Pistol, "Pistol", 10, 1.0f, 1, true, 1, true, 200)
 	{
 		upgradeTable = new WeaponParams[5];
-		upgradeTable[0] = new WeaponParams(20, 1, 1, 2, 100, false);
-		upgradeTable[1] = new WeaponParams(20, 1, 1, 2, 100, false);
-		upgradeTable[2] = new WeaponParams(20, 1, 1, 2, 100, false);
-		upgradeTable[3] = new WeaponParams(20, 1, 1, 2, 100, false);
-		upgradeTable[4] = new WeaponParams(20, 1, 1, 2, 100, false);
+		upgradeTable[0] = new WeaponParams(10, 1, 1, 1, 100, false);
+		upgradeTable[1] = new WeaponParams(20, 0.5f, 2, 4, 100, false);
+		upgradeTable[2] = new WeaponParams(20, 0.4f, 3, 3, 100, false);
+		upgradeTable[3] = new WeaponParams(20, 0.3f, 4, 5, 100, false);
+		upgradeTable[4] = new WeaponParams(20, 0.2f, 5, 6, 100, false);
 	}
 }
 
 [RequireComponent(typeof(WeaponController))]
-public class WeaponManager : MBSingleton<WeaponManager> 
+public partial class WeaponManager : MBSingleton<WeaponManager> 
 {
 	Weapon[] weaponTable;
 	
@@ -206,14 +56,14 @@ public class WeaponManager : MBSingleton<WeaponManager>
 	public void UpdateWeapon(WeaponType weaponType)
 	{
 		Weapon weapon = weaponTable [(int)weaponType];
-		if (weapon.active) {
+		if (weapon.m_Active) {
 			currentWeapon.val = weaponType;
 			GetComponent<WeaponController> ().SetWeaponParams 
-			(	weapon.maxAmmo, 
-				weapon.reloadTime, 
-				weapon.power,
-				weapon.continousFire,
-				weapon.shootPerSecond
+			(	weapon.GetWeaponParams().maxAmmo, 
+				weapon.GetWeaponParams().reloadTime, 
+				weapon.GetWeaponParams().power,
+				weapon.m_ContinousFire,
+				weapon.GetWeaponParams().shootPerSecond
 			);
 		}
 	}
@@ -226,7 +76,12 @@ public class WeaponManager : MBSingleton<WeaponManager>
 	{
 		currentWeapon.val = weaponType;
 		Weapon weapon = weaponTable [(int)weaponType];
-		weapon.active = true;
+		weapon.m_Active = true;
+	}
+
+	public Weapon GetWeapon(WeaponType weaponType)
+	{
+		return weaponTable [(int)weaponType];
 	}
 
 	// Use this for initialization
@@ -237,6 +92,8 @@ public class WeaponManager : MBSingleton<WeaponManager>
 		weaponTable[(int)WeaponType.Pistol] = new Pistol();
 
 		weaponTable[(int)WeaponType.Uzi] = new Uzi();
+
+		UpdateWeapon(WeaponType.Pistol);
 	}
 
 	public Weapon[] GetWeaponTable()
